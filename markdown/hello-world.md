@@ -9,7 +9,8 @@ It is traditional for your first program in a new language to be [Hello, world](
 
 ```elixir
 defmodule Greetings do
-  def hello do
+  @spec say_hello :: :ok
+  def say_hello do
    IO.puts "Hello, world"
   end
 end
@@ -21,15 +22,20 @@ To run it type `iex hello.ex`.
 
 ## How it works
 
-When you write a program in Elixir, you will have an `elixir` module defined with a function inside it. Modules are ways of grouping up related Elixir code together.
+- When you write a program in Elixir, you will have an `elixir` module defined with a function inside it. Modules are ways of grouping up related Elixir code together.
 
-The `defmodule` keyword is how you define a function with a name and a body.
+- The `defmodule` keyword is how you define a function with a name and a body.
 
-The `def` keyword is how you define a function with a name and a body.
+- The `def` keyword is how you define a function with a name and a body.
+
+- Functions in Elixir implicitly return the last expression the function without the need specify the `return` keyword like in other languages.
+
+- The @spec keyword is used to specify the types of the arguments and the return value of a function.
+  - We are expecting `say_hello/0` to return the `:ok` atom because `IO.puts` returns it after printing a message.
 
 ## How to test
 
-How do you test this? It is good to separate your "domain" code from the outside world (side-effects). The `IO.puts` is a side effect (printing to stdout\ and the string we send in is our domain.
+How do you test this? It is good to separate your "domain" code from the outside world (side-effects). The `IO.puts` is a side effect (printing to stdout) and the string we send in is our domain.
 
 So let's separate these concerns so it's easier to test
 
@@ -40,6 +46,7 @@ defmodule Greetings do
     "Hello, world"
   end
 
+  @spec say_hello :: :ok
   def say_hello do
     IO.puts(hello())
   end
@@ -50,7 +57,7 @@ Greetings.greetings()
 
 We have created a new function again with `def`. This time we've added a type spec of `String.t()` in the definition. This means this function returns a `string`.
 
-Now create a new file called `hello_test.exs` where we are going to write a test for our `hello` function
+Now create a new file called `hello_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
 
 ```elixir
 defmodule GreetingsTest do
@@ -66,25 +73,23 @@ end
 
 Run `mix test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
 
+Notice the file extensions `.exs` which `hello_test.exs` uses and the `.ex` our `hello.ex` file uses. Files that end in `.ex` are compiled while those that end in `.exs` run as scripts without the need to be compiled.
+
 Notice how you have not had to pick between multiple testing frameworks and then figure out how to install. ExUnit is included as part of the Elixir standard library, which means that you don't have to install any additional packages or dependencies to use it.
 
 ### ExUnit
 
 - ExUnit is a powerful unit testing framework for the Elixir programming language that enables developers to define and run automated tests to verify the correctness and reliability of their code. It provides a simple and flexible syntax for defining test functions that check specific behaviors or features of the code being tested, as well as a variety of assertion functions and utilities to facilitate the testing process.
 
-- The `test` macro defines a test function. A `test` function must be defined inside a module that uses the ExUnit.Case macro. It takes a string describing the test as an argument.
-
 ### Writing tests
 
 Writing a test is just like writing a function, with a few rules
 
 - It needs to be in a file with a name like `xxx_test.exs`
-- The test module must end with the word `XxxTest`
+- The test module must end with the word `Test`(ex. GreetingsTest)
 - The test function must start with the word `test`
 - `test` functions should be organized into logical groups by using Elixir's `describe` macro to define nested test blocks.
-- You need to use `ExUnit.Case`
-- `ExUnit.Case`
-- `test`
+- `ExUnit.Case` needs to be used
 
 #### `ExUnit.Case`
 
@@ -128,7 +133,7 @@ defmodule GreetingsTest do
 end
 ```
 
-Now run `mix test`, your testu runner should give you an error
+Now run `mix test`, ExUnit's test runner should give you an error
 
 ```text
   1) test hello (GreetingsTest)
@@ -141,21 +146,17 @@ Now run `mix test`, your testu runner should give you an error
      stacktrace:
        (delete 0.1.0) Greetings.hello("Chris")
        test/delete_test.exs:5: (test)
-
-
-Finished in 0.03 seconds (0.03s async, 0.00s sync)
-1 test, 1 failure
 ```
 
 When a test fails, the ExUnit Test Runner will provide an error message that describes the problem and a stack trace, which shows the sequence of function calls that led to the error.
 
 It is important to listen to the ExUnit Test Runner when running into errors because it provides valuable information about what went wrong with the tests and how to fix the issue.
 
-Here, the test runner is telling you to change the function `hello` to accept an argument of one.
+Here, the test runner is telling you to change the function `hello/0` to accept an argument of one.
 
-Edit the `hello` function to accept an argument of one.
+Edit the `hello/0` function to accept an argument of one.
 
-It is still important to listen to the compiler in a dynamically typed language like Elixir. While Elixir does not require explicit type declarations, the compiler still performs various checks and optimizations on the code. Listening to the compiler can help catch errors and improve the performance of your code. Additionally, the Elixir compiler provides helpful warning messages and suggestions for improving your code
+Edit the type spec to reflect this. Since we know `name` will be a string, we'll add String.() to `hello/1`'s argument field
 
 ```elixir
 @spec hello(String.t()) :: String.t()
@@ -164,15 +165,16 @@ def hello(name) do
 end
 ```
 
-If you try and run your program again your `hello.ex` will fail to compile because you're not passing an argument.
+If you try and run your program again your `hello.ex` will fail to compile because you're not passing in an argument to the `say_hello/0` function.
 
-It is still important to listen to the compiler in a dynamically typed language like Elixir. While Elixir does not require explicit type declarations, the compiler still performs various checks and optimizations on the code. Listening to the compiler can help catch errors and improve the performance of your code. Additionally, the Elixir compiler provides helpful warning messages and suggestions for improving your code
+It is still important to listen to the compiler in a dynamically typed language like Elixir. While Elixir does not require explicit type declarations, the compiler still performs various checks and optimizations on the code. Listening to it can help catch errors and improve the performance of your code.
 
-Send in "world" to make it compile.
+Send in "world" to make `hello.ex` compile.
 
 ```elixir
+@spec say_hello :: :ok
 def say_hello do
-    IO.puts(hello("world"))
+  IO.puts(hello("world"))
 end
 ```
 
@@ -196,7 +198,7 @@ Let's make the test pass by using the name argument and concatenate it with `"He
 ```elixir
 @spec hello(String.t()) :: String.t()
 def hello(name) do
-    "Hello, " <> name
+  "Hello, " <> name
 end
 ```
 
@@ -227,15 +229,16 @@ We can now refactor our code
 ```elixir
 @english_hello_prefix "Hello, "
 
+@spec hello(String.t()) :: String.t()
 def hello(name) do
-    @english_hello_prefix <> name
+  @english_hello_prefix <> name
 end
 
 ```
 
 After refactoring, re-run your tests to make sure you haven't broken anything.
 
-Module Attributes should improve performance of your application as it saves you creating the `"Hello, "` string instance every time `hello` is called.
+Module Attributes should improve performance of your application as it saves you creating the `"Hello, "` string instance every time `hello/1` is called.
 
 To be clear, the performance boost is incredibly negligible for this example! But it's worth thinking about creating module attributes to capture the meaning of values and sometimes to aid performance.
 
@@ -246,34 +249,30 @@ The next requirement is when our function is called with an empty string it defa
 Start by writing a new failing test
 
 ```elixir
-defmodule GreetingsTest do
-  use ExUnit.Case
-  descrribe "hello/1" do
-    test "saying hello to people'" do
-        assert Greetings.hello("Chris") == "Hello, Chris"
-    end
+describe "hello/1" do
+  test "saying hello to people'" do
+    assert Greetings.hello("Chris") == "Hello, Chris"
+  end
 
-    test "empty string defaults to 'world'" do
-        assert Greetings.hello("") == "Hello, world"
-    end
+  test "empty string defaults to 'world'" do
+    assert Greetings.hello("") == "Hello, World"
   end
 end
-
 ```
 
 Now that we have a well-written failing test, let's fix the code, using pattern matching.
 
 ```elixir
-defmodule Greetings do
-  @english_hello_prefix "Hello, "
+@english_hello_prefix "Hello, "
 
-  def hello(name) do
-    @english_hello_prefix <> name_with_default(name)
-  end
-
-  defp name_with_default(""), do: "world"
-  defp name_with_default(name), do: name
+@spec hello(String.t()) :: String.t()
+def hello(name) do
+  @english_hello_prefix <> name_with_default(name)
 end
+
+@spec name_with_default(String.t()) :: String.t()
+defp name_with_default(""), do: "World"
+defp name_with_default(name), do: name
 ```
 
 If we run our tests we should see it satisfies the new requirement and we haven't accidentally broken the other functionality.
@@ -322,13 +321,15 @@ We should be confident that we can use TDD to flesh out this functionality easil
 
 Write a test for a user passing in Spanish. Add it to the existing suite.
 
+# FLAG: Version that adds Spanish
+
 ```elixir
-  test "saying hello in Spanish" do
-    assert Greetings.hello("Elodie", "Spanish") == "Hola, Elodie"
-  end
+test "saying hello in Spanish" do
+  assert Greetings.hello("Elodie", "Spanish") == "Hola, Elodie"
+end
 ```
 
-Remember not to cheat! _Test first_. When you try and run the test, the test runner _should_ complain because you are calling `hello` with two arguments rather than one.
+Remember not to cheat! _Test first_. When you try and run the test, the test runner _should_ complain because you are calling `hello/1` with two arguments rather than one.
 
 ```text
   1) test hello/2 saying hello in Spanish (GreetingsTest)
@@ -343,20 +344,21 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
        test/delete_test.exs:4: (test)
 ```
 
-Fix the test error by adding another string argument to `hello`
+Fix the test error by adding another string argument to `hello/1` and thus making it `hello/2`
 
 ```elixir
 
 @spec hello(String.t(), String.t()) :: String.t()
 def hello(name, language) do
-    @english_hello_prefix <> name_with_default(name)
+  @english_hello_prefix <> name_with_default(name)
 end
 
-defp name_with_default(""), do: "world"
+@spec name_with_default(String.t()) :: String.t()
+defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 ```
 
-When you try and run the test again it will complain about not passing through enough arguments to `hello` in your other tests and in `hello.exs`
+When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `hello.exs`
 
 ```text
   1) test hello (GreetingsTest)
@@ -389,17 +391,20 @@ We can use pattern matching here to check the language is equal to "Spanish" and
 
 ```elixir
 
-  @english_hello_prefix "Hello, "
+@english_hello_prefix "Hello, "
 
-  def hello(name, language) do
-      language_prefix(language) <> name_with_default(name)
-  end
+@spec hello(String.t(), String.t()) :: String.t()
+def hello(name, language) do
+  language_prefix(language) <> name_with_default(name)
+end
 
-  defp name_with_default(""), do: "world"
-  defp name_with_default(name), do: name
+@spec name_with_default(String.t()) :: String.t()
+defp name_with_default(""), do: "World"
+defp name_with_default(name), do: name
 
-  defp language_prefix("Spanish"), do: "Hola, "
-  defp language_prefix(""), do: @english_hello_prefix
+@spec language_prefix(String.t()) :: String.t()
+defp language_prefix("Spanish"), do: "Hola, "
+defp language_prefix(""), do: @english_hello_prefix
 ```
 
 The tests should now pass.
@@ -408,19 +413,21 @@ Now it is time to _refactor_. You should see some problems in the code, "magic" 
 
 ```elixir
 
-  @english_hello_prefix "Hello, "
-  @spanish_hello_prefix "Hola, "
+@english_hello_prefix "Hello, "
+@spanish_hello_prefix "Hola, "
 
+@spec hello(String.t(), String.t()) :: String.t()
+def hello(name, language) do
+  language_prefix(language) <> name_with_default(name)
+end
 
-  def hello(name, language) do
-      language_prefix(language) <> name_with_default(name)
-  end
+@spec name_with_default(String.t()) :: String.t()
+defp name_with_default(""), do: "World"
+defp name_with_default(name), do: name
 
-  defp name_with_default(""), do: "world"
-  defp name_with_default(name), do: name
-
-  defp language_prefix("Spanish"), do: @spanish_hello_prefix
-  defp language_prefix(""), do: @english_hello_prefix
+@spec language_prefix(String.t()) :: String.t()
+defp language_prefix("Spanish"), do: @spanish_hello_prefix
+defp language_prefix(""), do: @english_hello_prefix
 ```
 
 ### French
@@ -433,32 +440,39 @@ You may have written something that looks roughly like this
 
 ```elixir
 
-  @english_hello_prefix "Hello, "
-  @spanish_hello_prefix "Hola, "
-  @french_hello_prefix "Bonjur, "
+@english_hello_prefix "Hello, "
+@spanish_hello_prefix "Hola, "
+@french_hello_prefix "Bonjur, "
 
+@spec hello(String.t(), String.t()) :: String.t()
+def hello(name, language) do
+    language_prefix(language) <> name_with_default(name)
+end
 
-  def hello(name, language) do
-      language_prefix(language) <> name_with_default(name)
-  end
+@spec name_with_default(String.t()) :: String.t()
+defp name_with_default(""), do: "World"
+defp name_with_default(name), do: name
 
-  defp name_with_default(""), do: "world"
-  defp name_with_default(name), do: name
-
-  defp language_prefix("Spanish"), do: @spanish_hello_prefix
-  defp language_prefix("French"), do: @french_hello_prefix
-  defp language_prefix(""), do: @english_hello_prefix
+@spec language_prefix(String.t()) :: String.t()
+defp language_prefix("Spanish"), do: @spanish_hello_prefix
+defp language_prefix("French"), do: @french_hello_prefix
+defp language_prefix(""), do: @english_hello_prefix
 ```
 
 ## `case`
 
 When you have lots of statements checking a particular value it is common to use a `case` statement instead. We can use `case` to refactor the code to make it easier to read and more extensible if we wish to add more language support later
 
+- The case statement in Elixir is similar to the switch statement in other languages except that it can match against any expression, not just simple values like integers or strings.
+- You can use the case statement to match against complex data structures, such as lists or maps, using pattern matching.
+- In other languages, the switch statement will continue to execute the next case clause if you do not include a break statement, whereas in Elixir, the case statement will stop executing as soon as it finds a matching clause.
+
 ```elixir
 @english_hello_prefix "Hello, "
 @spanish_hello_prefix "Hola, "
 @french_hello_prefix "Bonjur, "
 
+@spec hello(String.t(), String.t()) :: String.t()
 def hello(name, language) do
 
     prefix =
@@ -471,7 +485,8 @@ def hello(name, language) do
     prefix <> name_with_default(name)
 end
 
-defp name_with_default(""), do: "world"
+@spec name_with_default(String.t()) :: String.t()
+defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 ```
 
@@ -486,13 +501,16 @@ You could argue that maybe our function is getting a little big. The simplest re
 @spanish_hello_prefix "Hola, "
 @french_hello_prefix "Bonjur, "
 
+@spec hello(String.t(), String.t()) :: String.t()
 def hello(name, language) do
     greetingPrefix(language) <> name_with_default(name)
 end
 
-defp name_with_default(""), do: "world"
+@spec name_with_default(String.t()) :: String.t()
+defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 
+@spec greetingPrefix(String.t()) :: String.t(0)
 defp greetingPrefix(language) do
     case language do
       "spanish" -> @spanish_hello_prefix
