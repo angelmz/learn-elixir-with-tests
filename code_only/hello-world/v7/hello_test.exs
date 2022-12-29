@@ -3,7 +3,7 @@ defmodule GreetingsTest do
 
   describe "hello/2" do
     test "saying hello to people'" do
-      assert Greetings.hello("Angel", "") == "Hello, Seth"
+      assert Greetings.hello("Angel", "") == "Hello, Angel"
     end
 
     test "say hello world when an empty string is supplied" do
@@ -15,7 +15,7 @@ defmodule GreetingsTest do
     end
 
     test "say hello in Spanish" do
-      assert Greetings.hello("Nathan", :spanish) == "Hola, Seth"
+      assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
     end
   end
 end
