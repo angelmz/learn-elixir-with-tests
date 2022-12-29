@@ -1,4 +1,3 @@
-#YES
 defmodule GreetingsTest do
   use ExUnit.Case
 

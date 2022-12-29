@@ -9,29 +9,33 @@ It is traditional for your first program in a new language to be [Hello, world](
 
 ```elixir
 defmodule Greetings do
-  @spec say_hello :: :ok
+  @spec say_hello :: :void
   def say_hello do
    IO.puts "Hello, world"
   end
 end
-
-Greetings.greetings()
 ```
 
-To run it type `iex hello.ex`.
+- To run your program in iex type `iex -S mix hello.ex` at the root of your project in your termial.
+- Now type in `Greetings.say_hello()`
 
 ## How it works
 
-- When you write a program in Elixir, you will have an `elixir` module defined with a function inside it. Modules are ways of grouping up related Elixir code together.
+- When you write a program in Elixir, you will have an Elixir module defined with a function inside it. Modules are ways of grouping up related Elixir code together.
 
-- The `defmodule` keyword is how you define a function with a name and a body.
+- The `defmodule` keyword is how you define a module with a name and a body.
 
 - The `def` keyword is how you define a function with a name and a body.
 
 - Functions in Elixir implicitly return the last expression the function without the need specify the `return` keyword like in other languages.
 
-- The @spec keyword is used to specify the types of the arguments and the return value of a function.
-  - We are expecting `say_hello/0` to return the `:ok` atom because `IO.puts` returns it after printing a message.
+- The `@spec` keyword is used to specify the types of the arguments and the return value of a function.
+
+  - We are expecting `say_hello/0` to return the `:ok` atom
+    - The `/0` besides `say_hello` in the above sentence stands for the amount of argumens `say_hello` takes in.
+
+- `IO.puts` prints a line to the console and returns an `:ok` atom when it has finished exectuting successfully.
+  - Atoms are constants that represent a name or a string. They commonly used as message names in Elixir's process-oriented programming model. The `:ok` atom is a common convention in Elixir to indicate that a function or operation has completed successfully.
 
 ## How to test
 
@@ -51,8 +55,6 @@ defmodule Greetings do
     IO.puts(hello())
   end
 end
-
-Greetings.greetings()
 ```
 
 We have created a new function again with `def`. This time we've added a type spec of `String.t()` in the definition. This means this function returns a `string`.
@@ -323,7 +325,7 @@ Write a test for a user passing in Spanish. Add it to the existing suite.
 ```elixir
 describe "hello/2" do
   test "saying hello in Spanish" do
-    assert Greetings.hello("Elodie", "Spanish") == "Hola, Elodie"
+    assert Greetings.hello("Elodie", :spanish) == "Hola, Elodie"
   end
 end
 ```
@@ -337,9 +339,9 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
 
            * hello/1
 
-     code: assert Greetings.hello("Elodie", "Spanish") == "Hola, Elodie"
+     code: assert Greetings.hello("Elodie", :spanish) == "Hola, Elodie"
      stacktrace:
-       (delete 0.1.0) Greetings.hello("Elodie", "Spanish")
+       (delete 0.1.0) Greetings.hello("Elodie", :spanish)
        test/delete_test.exs:4: (test)
 ```
 
@@ -386,7 +388,7 @@ Fix them by passing through empty strings. Now all your tests should pass, apart
        test/delete_test.exs:5: (test)
 ```
 
-We can use pattern matching here to check the language is equal to "Spanish" and if so change the message
+We can use pattern matching here to check the language is equal to :spanish and if so change the message
 
 ```elixir
 
@@ -402,7 +404,7 @@ defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 
 @spec language_prefix(String.t()) :: String.t()
-defp language_prefix("Spanish"), do: "Hola, "
+defp language_prefix(:spanish), do: "Hola, "
 defp language_prefix(""), do: @english_hello_prefix
 ```
 
@@ -425,13 +427,13 @@ defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 
 @spec language_prefix(String.t()) :: String.t()
-defp language_prefix("Spanish"), do: @spanish_hello_prefix
+defp language_prefix(:spanish), do: @spanish_hello_prefix
 defp language_prefix(""), do: @english_hello_prefix
 ```
 
 ### French
 
-- Write a test asserting that if you pass in `"French"` you get `"Bonjour, "`
+- Write a test asserting that if you pass in `:french` you get `"Bonjour, "`
 - See it fail, check the error message is easy to read
 - Do the smallest reasonable change in the code
 
@@ -441,7 +443,7 @@ You may have written something that looks roughly like this
 
 @english_hello_prefix "Hello, "
 @spanish_hello_prefix "Hola, "
-@french_hello_prefix "Bonjur, "
+@french_hello_prefix "Bonjour, "
 
 @spec hello(String.t(), String.t()) :: String.t()
 def hello(name, language) do
@@ -453,8 +455,8 @@ defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 
 @spec language_prefix(String.t()) :: String.t()
-defp language_prefix("Spanish"), do: @spanish_hello_prefix
-defp language_prefix("French"), do: @french_hello_prefix
+defp language_prefix(:spanish), do: @spanish_hello_prefix
+defp language_prefix(:french), do: @french_hello_prefix
 defp language_prefix(""), do: @english_hello_prefix
 ```
 
@@ -469,14 +471,14 @@ When you have lots of statements checking a particular value it is common to use
 ```elixir
 @english_hello_prefix "Hello, "
 @spanish_hello_prefix "Hola, "
-@french_hello_prefix "Bonjur, "
+@french_hello_prefix "Bonjour, "
 
 @spec hello(String.t(), String.t()) :: String.t()
 def hello(name, language) do
 
     prefix =
         case language do
-            "spanish" -> @spanish_hello_prefix
+            :spanish -> @spanish_hello_prefix
             "french" -> @french_hello_prefix
             _ -> @english_hello_prefix
         end
@@ -498,7 +500,7 @@ You could argue that maybe our function is getting a little big. The simplest re
 ```elixir
 @english_hello_prefix "Hello, "
 @spanish_hello_prefix "Hola, "
-@french_hello_prefix "Bonjur, "
+@french_hello_prefix "Bonjour, "
 
 @spec hello(String.t(), String.t()) :: String.t()
 def hello(name, language) do
@@ -512,7 +514,7 @@ defp name_with_default(name), do: name
 @spec greeting_prefix(String.t()) :: String.t(0)
 defp greeting_prefix(language) do
     case language do
-      "spanish" -> @spanish_hello_prefix
+      :spanish -> @spanish_hello_prefix
       "french" -> @french_hello_prefix
       _ -> @english_hello_prefix
     end
@@ -545,6 +547,6 @@ By now you should have some understanding of:
 - Writing the smallest amount of code to make it pass so we know we have working software
 - _Then_ refactor, backed with the safety of our tests to ensure we have well-crafted code that is easy to work with
 
-In our case we've gone from `hello()` to `hello("name")`, to `hello("name", "French")` in small, easy to understand steps.
+In our case we've gone from `hello()` to `hello("name")`, to `hello("name", :french)` in small, easy to understand steps.
 
 This is of course trivial compared to "real world" software but the principles still stand. TDD is a skill that needs practice to develop, but by breaking problems down into smaller components that you can test, you will have a much easier time writing software.

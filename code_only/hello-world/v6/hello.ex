@@ -1,15 +1,15 @@
 defmodule Greetings do
   @english_hello_prefix "Hello, "
   @spanish_hello_prefix "Hola, "
-  @french_hello_prefix "Bonjur, "
+  @french_hello_prefix "Bonjour, "
 
   @spec hello(String.t(), String.t()) :: String.t()
   def hello(name, language) do
 
       prefix =
           case language do
-              "spanish" -> @spanish_hello_prefix
-              "french" -> @french_hello_prefix
+              :spanish -> @spanish_hello_prefix
+              :french -> @french_hello_prefix
               _ -> @english_hello_prefix
           end
 

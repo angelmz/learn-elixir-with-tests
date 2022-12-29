@@ -1,7 +1,7 @@
 defmodule Greetings do
   @english_hello_prefix "Hello, "
   @spanish_hello_prefix "Hola, "
-  @french_hello_prefix "Bonjur, "
+  @french_hello_prefix "Bonjour, "
 
   @spec hello(String.t(), String.t()) :: String.t()
   def hello(name, language) do
@@ -18,7 +18,7 @@ defmodule Greetings do
   defp name_with_default(name), do: name
 
   @spec language_prefix(String.t()) :: String.t()
-  defp language_prefix("Spanish"), do: @spanish_hello_prefix
-  defp language_prefix("French"), do: @french_hello_prefix
+  defp language_prefix(:spanish), do: @spanish_hello_prefix
+  defp language_prefix(:french), do: @french_hello_prefix
   defp language_prefix(""), do: @english_hello_prefix
 end

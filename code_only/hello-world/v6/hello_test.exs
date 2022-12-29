@@ -11,11 +11,11 @@ defmodule GreetingsTest do
     end
 
     test "say hello in French'" do
-      assert Greetings.hello("Seth", "French") == "Bonjour, Seth"
+      assert Greetings.hello("Seth", :french) == "Bonjour, Seth"
     end
 
     test "say hello in Spanish" do
-      assert Greetings.hello("Nathan", "Spanish") == "Hola, Seth"
+      assert Greetings.hello("Nathan", :spanish) == "Hola, Seth"
     end
   end
 end
