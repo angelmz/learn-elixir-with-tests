@@ -5,7 +5,15 @@ defmodule Greetings do
 
   @spec hello(String.t(), String.t()) :: String.t()
   def hello(name, language) do
-      language_prefix(language) <> name_with_default(name)
+
+      prefix =
+          case language do
+              "spanish" -> @spanish_hello_prefix
+              "french" -> @french_hello_prefix
+              _ -> @english_hello_prefix
+          end
+
+      prefix <> name_with_default(name)
   end
 
   @spec say_hello :: :ok
@@ -16,9 +24,4 @@ defmodule Greetings do
   @spec name_with_default(String.t()) :: String.t()
   defp name_with_default(""), do: "World"
   defp name_with_default(name), do: name
-
-  @spec language_prefix(String.t()) :: String.t()
-  defp language_prefix("Spanish"), do: @spanish_hello_prefix
-  defp language_prefix("French"), do: @french_hello_prefix
-  defp language_prefix(""), do: @english_hello_prefix
 end

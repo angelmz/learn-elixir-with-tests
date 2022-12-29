@@ -63,10 +63,8 @@ Now create a new file called `hello_test.exs` where we are going to write a test
 defmodule GreetingsTest do
   use ExUnit.Case
 
-  describe "hello/0" do
-    test "hello" do
-        assert Greetings.hello() == "Hello, world"
-    end
+  test "say hello world" do
+    assert Greetings.hello() == "Hello, world"
   end
 end
 ```
@@ -88,8 +86,7 @@ Writing a test is just like writing a function, with a few rules
 - It needs to be in a file with a name like `xxx_test.exs`
 - The test module must end with the word `Test`(ex. GreetingsTest)
 - The test function must start with the word `test`
-- `test` functions should be organized into logical groups by using Elixir's `describe` macro to define nested test blocks.
-- `ExUnit.Case` needs to be used
+- `ExUnit.Case` needs to be imported and callbacks invoked using the keyword `use`
 
 #### `ExUnit.Case`
 
@@ -100,10 +97,6 @@ Writing a test is just like writing a function, with a few rules
 #### macros
 
 A macro in Elixir can be thought of as a special kind of function that operates at compile time, rather than at runtime. However, instead of returning a value, a macro generates code that is then inserted into the program at the point where the macro is called.
-
-#### `describe`
-
-the `describe`, macro which is defined in the ExUnit.Case module, is used to define a test case in the ExUnit testing framework. It allows you to group related tests together and give them a descriptive name
 
 #### `test`
 
@@ -127,7 +120,7 @@ Let's start by capturing these requirements in a test. This is basic test driven
 defmodule GreetingsTest do
   use ExUnit.Case
 
-  test "hello" do
+  test "saying hello to people" do
     assert Greetings.hello("Chris") == "Hello, Chris"
   end
 end
@@ -260,6 +253,10 @@ describe "hello/1" do
 end
 ```
 
+Here we are introducing another tool in our testing arsenal, the `describe` macro.
+
+The `describe`, macro is used to define a test case in the ExUnit testing framework. It allows you to group related tests together and give them a descriptive name
+
 Now that we have a well-written failing test, let's fix the code, using pattern matching.
 
 ```elixir
@@ -324,8 +321,10 @@ Write a test for a user passing in Spanish. Add it to the existing suite.
 # FLAG: Version that adds Spanish
 
 ```elixir
-test "saying hello in Spanish" do
-  assert Greetings.hello("Elodie", "Spanish") == "Hola, Elodie"
+describe "hello/2" do
+  test "saying hello in Spanish" do
+    assert Greetings.hello("Elodie", "Spanish") == "Hola, Elodie"
+  end
 end
 ```
 
@@ -503,15 +502,15 @@ You could argue that maybe our function is getting a little big. The simplest re
 
 @spec hello(String.t(), String.t()) :: String.t()
 def hello(name, language) do
-    greetingPrefix(language) <> name_with_default(name)
+    greeting_prefix(language) <> name_with_default(name)
 end
 
 @spec name_with_default(String.t()) :: String.t()
 defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 
-@spec greetingPrefix(String.t()) :: String.t(0)
-defp greetingPrefix(language) do
+@spec greeting_prefix(String.t()) :: String.t(0)
+defp greeting_prefix(language) do
     case language do
       "spanish" -> @spanish_hello_prefix
       "french" -> @french_hello_prefix

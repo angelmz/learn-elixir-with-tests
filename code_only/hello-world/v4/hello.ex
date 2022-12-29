@@ -1,24 +1,17 @@
 defmodule Greetings do
-  def hello(name, "English"), do: "Hello, " <> name_with_default(name)
-  def hello(name, "Spanish"), do: "Hola, " <> name_with_default(name)
-  def hello(name, "French"), do: "Bonjour, " <> name_with_default(name)
-  def hello(name, ""), do: "Hello, " <> name_with_default(name)
+  @english_hello_prefix "Hello, "
 
+  @spec hello(String.t()) :: String.t()
+  def hello(name) do
+    @english_hello_prefix <> name_with_default(name)
+  end
+
+  @spec say_hello :: :ok
+  def say_hello do
+    IO.puts(hello("world"))
+  end
+
+  @spec name_with_default(String.t()) :: String.t()
   defp name_with_default(""), do: "World"
   defp name_with_default(name), do: name
-
-  # Option 2
-  # def hello(name, language) do
-  #   name = name_with_default(name)
-  #   prefix = prefix_for(language)
-  #   prefix <> name
-  # end
-
-  # defp name_with_default(""), do: "World"
-  # defp name_with_default(name), do: name
-
-  # defp prefix_for(:english), do: "Hello, "
-  # defp prefix_for(:spanish), do: "Hola, "
-  # defp prefix_for(:french), do: "Bonjour, "
-  # defp prefix_for(""), do: "Hello, "
 end

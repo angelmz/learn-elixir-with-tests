@@ -1,8 +1,13 @@
 defmodule Greetings do
+  @english_hello_prefix "Hello, "
+
+  @spec hello(String.t()) :: String.t()
   def hello(name) do
-    "Hello, " <> name_with_default(name)
+    @english_hello_prefix <> name
   end
 
-  defp name_with_default(""), do: "World"
-  defp name_with_default(name), do: name
+  @spec say_hello :: :ok
+  def say_hello do
+    IO.puts(hello("world"))
+  end
 end
