@@ -123,7 +123,7 @@ defmodule GreetingsTest do
   use ExUnit.Case
 
   test "saying hello to people" do
-    assert Greetings.hello("Chris") == "Hello, Chris"
+    assert Greetings.hello("Angel") == "Hello, Angel"
   end
 end
 ```
@@ -137,9 +137,9 @@ Now run `mix test`, ExUnit's test runner should give you an error
 
            * hello/0
 
-     code: assert Greetings.hello("Chris") == "Hello, Chris"
+     code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
-       (delete 0.1.0) Greetings.hello("Chris")
+       (delete 0.1.0) Greetings.hello("Angel")
        test/delete_test.exs:5: (test)
 ```
 
@@ -179,9 +179,9 @@ Now when you run your tests you should see something like
   1) test hello (GreetingsTest)
      test/hola_test.exs:4
      Assertion with == failed
-     code:  assert Greetings.hello("Chris") == "Hello, Chris"
+     code:  assert Greetings.hello("Angel") == "Hello, Angel"
      left:  "Hello, world"
-     right: "Hello, Chris"
+     right: "Hello, Angel"
      stacktrace:
        test/hola_test.exs:5: (test)
 ```
@@ -246,7 +246,7 @@ Start by writing a new failing test
 ```elixir
 describe "hello/1" do
   test "saying hello to people'" do
-    assert Greetings.hello("Chris") == "Hello, Chris"
+    assert Greetings.hello("Angel") == "Hello, Angel"
   end
 
   test "empty string defaults to 'world'" do
@@ -325,7 +325,7 @@ Write a test for a user passing in Spanish. Add it to the existing suite.
 ```elixir
 describe "hello/2" do
   test "saying hello in Spanish" do
-    assert Greetings.hello("Elodie", :spanish) == "Hola, Elodie"
+    assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
   end
 end
 ```
@@ -339,9 +339,9 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
 
            * hello/1
 
-     code: assert Greetings.hello("Elodie", :spanish) == "Hola, Elodie"
+     code: assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      stacktrace:
-       (delete 0.1.0) Greetings.hello("Elodie", :spanish)
+       (delete 0.1.0) Greetings.hello("Nathan", :spanish)
        test/delete_test.exs:4: (test)
 ```
 
@@ -368,9 +368,9 @@ When you try and run the test again it will complain about not passing through e
 
            * hello/2
 
-     code: assert Greetings.hello("Elodie") == "Hello, Elodie"
+     code: assert Greetings.hello("Nathan") == "Hello, Nathan"
      stacktrace:
-       (delete 0.1.0) Greetings.hello("Elodie")
+       (delete 0.1.0) Greetings.hello("Nathan")
        test/delete_test.exs:5: (test)
 ```
 
@@ -381,9 +381,9 @@ Fix them by passing through empty strings. Now all your tests should pass, apart
   1) test hello (GreetingsTest)
      test/delete_test.exs:4
      Assertion with == failed
-     code:  assert Greetings.hello("", "") == "Hola, Elodie"
+     code:  assert Greetings.hello("", "") == "Hola, Nathan"
      left:  "Hello, world"
-     right: "Hola, Elodie"
+     right: "Hola, Nathan"
      stacktrace:
        test/delete_test.exs:5: (test)
 ```
