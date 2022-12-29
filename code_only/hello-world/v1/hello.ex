@@ -4,7 +4,7 @@ defmodule Greetings do
     "Hello, world"
   end
 
-  @spec say_hello :: void
+  @spec say_hello :: :ok
   def say_hello do
     IO.puts(hello())
   end

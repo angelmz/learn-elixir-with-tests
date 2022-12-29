@@ -4,8 +4,8 @@
 
 It is traditional for your first program in a new language to be [Hello, world](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 
-- Run `mix new hello` to create a new elixir app named hello.
-- Cd into `hello` and put the following code inside `lib/hello.ex`
+- Run `mix new greetings` to create a new elixir app named greetings.
+- Cd into ``and put the following code inside`lib/greetings.ex`
 
 ```elixir
 defmodule Greetings do
@@ -16,7 +16,7 @@ defmodule Greetings do
 end
 ```
 
-- To run your program in iex type `iex -S mix hello.ex` at the root of your project in your termial.
+- To run your program in iex type `iex -S mix greetings.ex` at the root of your project in your termial.
 - Now type in `Greetings.say_hello()`
 
 ## How it works
@@ -59,7 +59,7 @@ end
 
 We have created a new function again with `def`. This time we've added a type spec of `String.t()` in the definition. This means this function returns a `string`.
 
-Now create a new file called `hello_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
+Now create a new file called `greetings_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
 
 ```elixir
 defmodule GreetingsTest do
@@ -73,13 +73,11 @@ end
 
 Run `mix test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
 
-Notice the file extensions `.exs` which `hello_test.exs` uses and the `.ex` our `hello.ex` file uses. Files that end in `.ex` are compiled while those that end in `.exs` run as scripts without the need to be compiled.
-
-Notice how you have not had to pick between multiple testing frameworks and then figure out how to install. ExUnit is included as part of the Elixir standard library, which means that you don't have to install any additional packages or dependencies to use it.
+Notice the file extensions `.exs` which `greetings_test.exs` uses and the `.ex` our `greetings.ex` file uses. The main difference between .ex and .exs files in Elixir is the way they are compiled and executed. `.ex` files are compiled ahead-of-time (AOT) into bytecode and are intended to be used in production environments, while `.exs` files are interpreted at runtime and are typically used for development, testing, and other tasks that don't require the performance benefits of AOT compilation.
 
 ### ExUnit
 
-- ExUnit is a powerful unit testing framework for the Elixir programming language that enables developers to define and run automated tests to verify the correctness and reliability of their code. It provides a simple and flexible syntax for defining test functions that check specific behaviors or features of the code being tested, as well as a variety of assertion functions and utilities to facilitate the testing process.
+- ExUnit is a powerful unit testing framework for the Elixir programming language that enables developers to define and run automated tests to verify the correctness and reliability of their code. It provides a simple and flexible syntax for defining test functions that check specific behaviors or features of the code being tested, as well as a variety of assertion functions and utilities to facilitate the testing process. ExUnit is included as part of the Elixir standard library, which means that you don't have to install any additional packages or dependencies to use it.
 
 ### Writing tests
 
@@ -131,16 +129,16 @@ end
 Now run `mix test`, ExUnit's test runner should give you an error
 
 ```text
-  1) test hello (GreetingsTest)
-     test/delete_test.exs:4
+  1) test saying hello to people' (GreetingsTest)
+     test/greetings_test.exs:4
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
            * hello/0
 
      code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
-       (delete 0.1.0) Greetings.hello("Angel")
-       test/delete_test.exs:5: (test)
+       (greetings 0.1.0) Greetings.hello("Angel")
+       test/greetings_test.exs:5: (test)
 ```
 
 When a test fails, the ExUnit Test Runner will provide an error message that describes the problem and a stack trace, which shows the sequence of function calls that led to the error.
@@ -160,11 +158,11 @@ def hello(name) do
 end
 ```
 
-If you try and run your program again your `hello.ex` will fail to compile because you're not passing in an argument to the `say_hello/0` function.
+If you try and run your program again your `greetings.ex` will fail to compile because you're not passing in an argument to the `say_hello/0` function.
 
 It is still important to listen to the compiler in a dynamically typed language like Elixir. While Elixir does not require explicit type declarations, the compiler still performs various checks and optimizations on the code. Listening to it can help catch errors and improve the performance of your code.
 
-Send in "world" to make `hello.ex` compile.
+Send in "world" to make `greetings.ex` compile.
 
 ```elixir
 @spec say_hello :: :ok
@@ -176,14 +174,14 @@ end
 Now when you run your tests you should see something like
 
 ```text
-  1) test hello (GreetingsTest)
-     test/hola_test.exs:4
+  1) test saying hello to people' (GreetingsTest)
+     test/greetings_test.exs:4
      Assertion with == failed
      code:  assert Greetings.hello("Angel") == "Hello, Angel"
      left:  "Hello, world"
      right: "Hello, Angel"
      stacktrace:
-       test/hola_test.exs:5: (test)
+       test/greetings_test.exs:5: (test)
 ```
 
 The `right:` represent want we are trying to assert, while `left:` represents the actual value returned by the function call.
@@ -323,26 +321,24 @@ Write a test for a user passing in Spanish. Add it to the existing suite.
 # FLAG: Version that adds Spanish
 
 ```elixir
-describe "hello/2" do
-  test "saying hello in Spanish" do
-    assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
-  end
+test "saying hello in Spanish" do
+  assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
 end
 ```
 
 Remember not to cheat! _Test first_. When you try and run the test, the test runner _should_ complain because you are calling `hello/1` with two arguments rather than one.
 
 ```text
-  1) test hello/2 saying hello in Spanish (GreetingsTest)
-     test/delete_test.exs:3
+  1) test hello/2 say hello in Spanish (GreetingsTest)
+     test/greetings_test.exs:13
      ** (UndefinedFunctionError) function Greetings.hello/2 is undefined or private. Did you mean:
 
            * hello/1
 
      code: assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      stacktrace:
-       (delete 0.1.0) Greetings.hello("Nathan", :spanish)
-       test/delete_test.exs:4: (test)
+       (greetings 0.1.0) Greetings.hello("Nathan", :spanish)
+       test/greetings_test.exs:14: (test)
 ```
 
 Fix the test error by adding another string argument to `hello/1` and thus making it `hello/2`
@@ -359,33 +355,33 @@ defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 ```
 
-When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `hello.exs`
+When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `greetings.exs`
 
 ```text
-  1) test hello (GreetingsTest)
-     test/delete_test.exs:4
+  3) test hello/2 saying hello to people' (GreetingsTest)
+     test/greetings_test.exs:5
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
            * hello/2
 
-     code: assert Greetings.hello("Nathan") == "Hello, Nathan"
+     code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
-       (delete 0.1.0) Greetings.hello("Nathan")
-       test/delete_test.exs:5: (test)
+       (greetings 0.1.0) Greetings.hello("Angel")
+       test/greetings_test.exs:6: (test)
 ```
 
 Fix them by passing through empty strings. Now all your tests should pass, apart from our new scenario
 #FLAG: Make sure .exs:the the correct line in example code
 
 ```text
-  1) test hello (GreetingsTest)
-     test/delete_test.exs:4
+  1) test hello/2 say hello in Spanish (GreetingsTest)
+     test/greetings_test.exs:13
      Assertion with == failed
-     code:  assert Greetings.hello("", "") == "Hola, Nathan"
-     left:  "Hello, world"
+     code:  assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
+     left:  "Hello, Nathan"
      right: "Hola, Nathan"
      stacktrace:
-       test/delete_test.exs:5: (test)
+       test/greetings_test.exs:14: (test)
 ```
 
 We can use pattern matching here to check the language is equal to :spanish and if so change the message
