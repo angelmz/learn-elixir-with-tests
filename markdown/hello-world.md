@@ -34,7 +34,7 @@ end
   - We are expecting `say_hello/0` to return the `:ok` atom
     - The `/0` besides `say_hello` in the above sentence stands for the amount of argumens `say_hello` takes in.
 
-- `IO.puts` prints a line to the console and returns an `:ok` atom when it has finished exectuting successfully.
+- `IO.puts` prints a line to stdout and returns an `:ok` atom when it has finished exectuting successfully.
   - Atoms are constants that represent a name or a string. They commonly used as message names in Elixir's process-oriented programming model. The `:ok` atom is a common convention in Elixir to indicate that a function or operation has completed successfully.
 
 ## How to test
@@ -479,7 +479,7 @@ def hello(name, language) do
     prefix =
         case language do
             :spanish -> @spanish_hello_prefix
-            "french" -> @french_hello_prefix
+            :french -> @french_hello_prefix
             _ -> @english_hello_prefix
         end
 
@@ -515,7 +515,7 @@ defp name_with_default(name), do: name
 defp greeting_prefix(language) do
     case language do
       :spanish -> @spanish_hello_prefix
-      "french" -> @french_hello_prefix
+      :french -> @french_hello_prefix
       _ -> @english_hello_prefix
     end
 end
