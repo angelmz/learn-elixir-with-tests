@@ -5,11 +5,11 @@
 It is traditional for your first program in a new language to be [Hello, world](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 
 - Run `mix new greetings` to create a new elixir app named greetings.
-- Cd into ``and put the following code inside`lib/greetings.ex`
+- Cd into ``and put the following code inside`lib/greetings.ex`.
 
 ```elixir
 defmodule Greetings do
-  @spec say_hello :: :void
+  @spec say_hello :: :ok
   def say_hello do
    IO.puts "Hello, world"
   end

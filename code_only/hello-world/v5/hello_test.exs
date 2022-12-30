@@ -1,5 +1,5 @@
 defmodule GreetingsTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   describe "hello/2" do
     test "saying hello to people'" do
