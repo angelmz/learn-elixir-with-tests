@@ -1,25 +1,23 @@
-# Integers
+# Integers and Mix
 
 **[You can find all the code for this chapter here](https://github.com/quii/learn-go-with-tests/tree/main/integers)**
-
-Integers work as you would expect. Let's write an `Add` function to try things out. Create a test file called `adder_test.go` and write this code.
 
 <!-- Flag: Introducing Mix, the folder structure,  -->
 
 ## Inroducing mix
 
-- Run `mix new greetings` to create a new elixir app named greetings.
+- Run `mix new integers` to create a new elixir app named integers.
 
 Mix is a build tool that ships with Elixir that automates tasks for creating, compiling, and testing your application.
 
 Your project should have the following file and folder structure.
 
 ```text
-hello_world/
+integers/
   lib/
-    hello_world.ex
+    integers.ex
   test/
-    hello_world_test.exs
+    integers_test.exs
     test_helper.exs
   .formatter.exs
   .gitignore
@@ -27,29 +25,24 @@ hello_world/
   README.md
 ```
 
-### The lib Folder
+### The `lib` Folder
 
-The lib/ folder contains the files for the project. We start with a single module named after the project. You should have a HelloWorld module in the lib/hello_world.ex file.
+The lib/ folder contains the files for the project. We start with a single module named after the project. You should have a HelloWorld module in the lib/integers.ex file.
 
-We use @moduledoc and @doc to document our code.
+### The `test` Folder
 
-### The test folder
+Mix will have generated a predefined example test file `test/integers_test.exs`
 
-You will fine a pre defined test in the test/ folder.
+In Elixir, the mix `test` command is used to run the tests that are defined in your project. When you run mix `test`, Mix will automatically search for and run any files that match the pattern test/\*\_test.exs.
 
-- Mix will have generated an example test file test/hello_world_test.exs
-- Notice how `ExUnit.start` is not inclodude. If you look under `test/helpers.exs`, you will find it it there.
-
-In Elixir, the mix test command is used to run the tests that are defined in your project. When you run mix test, Mix will automatically search for and run any files that match the pattern test/\*\_test.exs.
-
-The test/test_helpers.exs file is a special file that is run before any of the test files in the test directory. It is used to define common code that is used by multiple test files. For example, you might use the test_helpers.exs file to define helper functions that are used by multiple test files, or to set up the environment for the tests ).
+Notice how `ExUnit.start()` is not incloduded. If you look under `test/test_helpers.exs`, you will find it it there. The `test_helpers.exs` file is a special file that is run before any of the test files in the test directory. It is used to define common code that is used by multiple test files.
 
 ### Let's get started
 
 Talk about the `integers.ex`
 -Introduce moduledoc, function docs with parameters - talk about examples later?
 
-## Tat integers_test.ex
+Integers work as you would expect in Elixir. Let's take a look inside `integers_test.ex`. Let's delete pre-included test and write our ow, Let's write an `add` function to try things out
 
 ```elixir
 defmodule IntegersTest do
@@ -57,12 +50,18 @@ defmodule IntegersTest do
   doctest Integers
 
   test "greets the world" do
-    assert Integers.hello() == :world
+    assert Integers.adder(2,2) == 4
   end
 end
 ```
 
 <!-- Flag: @moduledoc, @doc. Introduce doctest, printing them to the console now or later?  -->
+
+Elixir treats documentation as a first-class citizen. This means documentation should be easy to write and easy to read.
+
+We use @moduledoc and @doc to document our code. The @moduledoc attribute is used to add documentation to the module. @doc is used before a function to provide documentation for it.
+
+In documentation is a contract with users of your API, who may not necessarily have access to the source code; whereas code comments are for those who interact directly with the source. You can learn and express different guarantees about your software by separating those two concepts.
 
 ```elixir
 defmodule IntegersTest do

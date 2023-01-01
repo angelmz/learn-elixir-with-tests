@@ -4,8 +4,8 @@
 
 It is traditional for your first program in a new language to be [Hello, world](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 
-- Run `mix new greetings` to create a new elixir app named greetings.
-- Cd into ``and put the following code inside`lib/greetings.ex`.
+- Create a folder wherever you like
+- Put a new file in it called `greetings.ex` and put the following code inside it
 
 ```elixir
 defmodule Greetings do
@@ -16,8 +16,8 @@ defmodule Greetings do
 end
 ```
 
-- To run your program in iex type `iex -S mix greetings.ex` at the root of your project in your termial.
-- Now type in `Greetings.say_hello()`
+- Run `elixirc` to compile the app, then to run your program in iex type `iex greetings.ex`.
+- Now type in `Greetings.say_hello()` to be greeted by your program!
 
 ## How it works
 
@@ -35,7 +35,10 @@ end
     - The `/0` besides `say_hello` in the above sentence stands for the amount of argumens `say_hello` takes in.
 
 - `IO.puts` prints a line to stdout and returns an `:ok` atom when it has finished exectuting successfully.
+
   - Atoms are constants that represent a name or a string. They commonly used as message names in Elixir's process-oriented programming model. The `:ok` atom is a common convention in Elixir to indicate that a function or operation has completed successfully.
+
+- `elixirc` is used to compile Elixir source code files into bytecode that can be run on the Erlang Virtual Machine (VM).
 
 ## How to test
 
@@ -62,6 +65,8 @@ We have created a new function again with `def`. This time we've added a type sp
 Now create a new file called `greetings_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
 
 ```elixir
+ExUnit.start()
+
 defmodule GreetingsTest do
   use ExUnit.Case
 
@@ -71,13 +76,9 @@ defmodule GreetingsTest do
 end
 ```
 
-Run `mix test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
+Run `elixir test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
 
 Notice the file extensions `.exs` which `greetings_test.exs` uses and the `.ex` our `greetings.ex` file uses. The main difference between .ex and .exs files in Elixir is the way they are compiled and executed. `.ex` files are compiled ahead-of-time (AOT) into bytecode and are intended to be used in production environments, while `.exs` files are interpreted at runtime and are typically used for development, testing, and other tasks that don't require the performance benefits of AOT compilation.
-
-### ExUnit
-
-- ExUnit is a powerful unit testing framework for the Elixir programming language that enables developers to define and run automated tests to verify the correctness and reliability of their code. It provides a simple and flexible syntax for defining test functions that check specific behaviors or features of the code being tested, as well as a variety of assertion functions and utilities to facilitate the testing process. ExUnit is included as part of the Elixir standard library, which means that you don't have to install any additional packages or dependencies to use it.
 
 ### Writing tests
 
@@ -87,6 +88,10 @@ Writing a test is just like writing a function, with a few rules
 - The test module must end with the word `Test`(ex. GreetingsTest)
 - The test function must start with the word `test`
 - `ExUnit.Case` needs to be imported and callbacks invoked using the keyword `use`
+
+#### `ExUnit.start()`
+
+-Starts ExUnit and automatically runs tests right before the VM terminates.
 
 #### `ExUnit.Case`
 
@@ -117,6 +122,8 @@ Our next requirement is to let us specify the recipient of the greeting.
 Let's start by capturing these requirements in a test. This is basic test driven development and allows us to make sure our test is _actually_ testing what we want. When you retrospectively write tests there is the risk that your test may continue to pass even if the code doesn't work as intended.
 
 ```elixir
+ExUnit.start()
+
 defmodule GreetingsTest do
   use ExUnit.Case
 
@@ -126,11 +133,12 @@ defmodule GreetingsTest do
 end
 ```
 
-Now run `mix test`, ExUnit's test runner should give you an error
+Now run `elixir test`, ExUnit's test runner should give you an error
 
 ```text
   1) test saying hello to people' (GreetingsTest)
-     test/greetings_test.exs:4
+     greetings_test.exs:4
+
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
            * hello/0
@@ -138,10 +146,17 @@ Now run `mix test`, ExUnit's test runner should give you an error
      code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Angel")
-       test/greetings_test.exs:5: (test)
+       greetings_test.exs:5: (test)
+
+Finished in 0.1 seconds (0.1s on load, 0.00s async, 0.00s sync)
+1 test, 1 failure
 ```
 
-When a test fails, the ExUnit Test Runner will provide an error message that describes the problem and a stack trace, which shows the sequence of function calls that led to the error.
+- The first line is the name of the test
+- The actual error: `** (UndefinedFunctionError)`
+- `code:` the code of the function that was being executed when the error or exception occurred.
+- `stacktrace`: the sequence of function calls that led to the error.
+- The final line tells us how many tests there are and how many of them failed.
 
 It is important to listen to the ExUnit Test Runner when running into errors because it provides valuable information about what went wrong with the tests and how to fix the issue.
 
@@ -149,7 +164,7 @@ Here, the test runner is telling you to change the function `hello/0` to accept 
 
 Edit the `hello/0` function to accept an argument of one.
 
-Edit the type spec to reflect this. Since we know `name` will be a string, we'll add String.() to `hello/1`'s argument field
+Edit the type spec to reflect this. Since we know `name` will be a string, we'll add String.t() to `hello/0`'s argument field and thus make it `hello/1`.
 
 ```elixir
 @spec hello(String.t()) :: String.t()
@@ -175,13 +190,13 @@ Now when you run your tests you should see something like
 
 ```text
   1) test saying hello to people' (GreetingsTest)
-     test/greetings_test.exs:4
+     greetings_test.exs:4
      Assertion with == failed
      code:  assert Greetings.hello("Angel") == "Hello, Angel"
      left:  "Hello, world"
      right: "Hello, Angel"
      stacktrace:
-       test/greetings_test.exs:5: (test)
+       greetings_test.exs:5: (test)
 ```
 
 The `right:` represent want we are trying to assert, while `left:` represents the actual value returned by the function call.
@@ -318,8 +333,6 @@ We should be confident that we can use TDD to flesh out this functionality easil
 
 Write a test for a user passing in Spanish. Add it to the existing suite.
 
-# FLAG: Version that adds Spanish
-
 ```elixir
 test "saying hello in Spanish" do
   assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
@@ -330,7 +343,7 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
 
 ```text
   1) test hello/2 say hello in Spanish (GreetingsTest)
-     test/greetings_test.exs:13
+     greetings_test.exs:13
      ** (UndefinedFunctionError) function Greetings.hello/2 is undefined or private. Did you mean:
 
            * hello/1
@@ -338,10 +351,10 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
      code: assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Nathan", :spanish)
-       test/greetings_test.exs:14: (test)
+       greetings_test.exs:14: (test)
 ```
 
-Fix the test error by adding another string argument to `hello/1` and thus making it `hello/2`
+Fix the test error by adding another string argument to `hello/1`.
 
 ```elixir
 
@@ -358,8 +371,8 @@ defp name_with_default(name), do: name
 When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `greetings.exs`
 
 ```text
-  3) test hello/2 saying hello to people' (GreetingsTest)
-     test/greetings_test.exs:5
+  1) test hello/2 saying hello to people' (GreetingsTest)
+     greetings_test.exs:5
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
            * hello/2
@@ -367,21 +380,20 @@ When you try and run the test again it will complain about not passing through e
      code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Angel")
-       test/greetings_test.exs:6: (test)
+       greetings_test.exs:6: (test)
 ```
 
 Fix them by passing through empty strings. Now all your tests should pass, apart from our new scenario
-#FLAG: Make sure .exs:the the correct line in example code
 
 ```text
   1) test hello/2 say hello in Spanish (GreetingsTest)
-     test/greetings_test.exs:13
+     greetings_test.exs:13
      Assertion with == failed
      code:  assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      left:  "Hello, Nathan"
      right: "Hola, Nathan"
      stacktrace:
-       test/greetings_test.exs:14: (test)
+       greetings_test.exs:14: (test)
 ```
 
 We can use pattern matching here to check the language is equal to :spanish and if so change the message

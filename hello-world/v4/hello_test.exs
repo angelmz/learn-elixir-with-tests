@@ -1,3 +1,5 @@
+ExUnit.start()
+
 defmodule GreetingsTest do
   use ExUnit.Case
 

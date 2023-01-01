@@ -1,4 +1,4 @@
-# Install Elixir, set up environment for productivity
+# Install Elixir and set up it's enviromnet.
 
 The official installation instructions for Elixir are available [here](https://elixir-lang.org/install.html).
 
@@ -9,6 +9,10 @@ The official installation instructions for Elixir are available [here](https://e
 When you install Elixir, you will have three new executables: `iex`, `elixir` and `elixirc`.
 
 `iex` (or `iex.bat` if you are on Windows PowerShell, where `iex` is a PowerShell command) stands for Interactive Elixir. In interactive mode, we can type any Elixir expression and get its result.
+
+### ExUnit
+
+ExUnit is a powerful unit testing framework for the Elixir programming language that enables developers to define and run automated tests to verify the correctness and reliability of their code. It provides a simple and flexible syntax for defining test functions that check specific behaviors or features of the code being tested, as well as a variety of assertion functions and utilities to facilitate the testing process. ExUnit is included as part of the Elixir standard library, which means that you don't have to install any additional packages or dependencies to use it.
 
 ### [Mix](https://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html)
 
