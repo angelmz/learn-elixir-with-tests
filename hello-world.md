@@ -1,6 +1,6 @@
 # Hello, world
 
-**[You can find all the code for this chapter here](https://github.com/angel/learn-elixir-with-tests/tree/Greetings/hello-world)**
+**[You can find all the code for this chapter here](https://github.com/angelmz/learn-elixir-with-tests/tree/main/hello-world)**
 
 It is traditional for your first program in a new language to be [Hello, world](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 
