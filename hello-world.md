@@ -5,7 +5,7 @@
 It is traditional for your first program in a new language to be [Hello, world](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 
 - Create a folder wherever you like
-- Put a new file in it called `greetings.ex` and put the following code inside it
+- Put a new file in it called `hello_world.ex` and put the following code inside it
 
 ```elixir
 defmodule Greetings do
@@ -16,7 +16,7 @@ defmodule Greetings do
 end
 ```
 
-- Run `elixirc` to compile the app, then to run your program in iex type `iex greetings.ex`.
+- Run `elixirc` to compile the app, then to run your program in iex type `iex hello_world.ex`.
 - Now type in `Greetings.say_hello()` to be greeted by your program!
 
 ## How it works
@@ -62,7 +62,7 @@ end
 
 We have created a new function again with `def`. This time we've added a type spec of `String.t()` in the definition. This means this function returns a `string`.
 
-Now create a new file called `greetings_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
+Now create a new file called `hello_world_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
 
 ```elixir
 ExUnit.start()
@@ -78,7 +78,7 @@ end
 
 Run `elixir test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
 
-Notice the file extensions `.exs` which `greetings_test.exs` uses and the `.ex` our `greetings.ex` file uses. The main difference between .ex and .exs files in Elixir is the way they are compiled and executed. `.ex` files are compiled ahead-of-time (AOT) into bytecode and are intended to be used in production environments, while `.exs` files are interpreted at runtime and are typically used for development, testing, and other tasks that don't require the performance benefits of AOT compilation.
+Notice the file extensions `.exs` which `hello_world_test.exs` uses and the `.ex` our `hello_world.ex` file uses. The main difference between .ex and .exs files in Elixir is the way they are compiled and executed. `.ex` files are compiled ahead-of-time (AOT) into bytecode and are intended to be used in production environments, while `.exs` files are interpreted at runtime and are typically used for development, testing, and other tasks that don't require the performance benefits of AOT compilation.
 
 ### Writing tests
 
@@ -137,7 +137,7 @@ Now run `elixir test`, ExUnit's test runner should give you an error
 
 ```text
   1) test saying hello to people' (GreetingsTest)
-     greetings_test.exs:4
+     hello_world_test.exs:4
 
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
@@ -146,7 +146,7 @@ Now run `elixir test`, ExUnit's test runner should give you an error
      code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Angel")
-       greetings_test.exs:5: (test)
+       hello_world_test.exs:5: (test)
 
 Finished in 0.1 seconds (0.1s on load, 0.00s async, 0.00s sync)
 1 test, 1 failure
@@ -173,11 +173,11 @@ def hello(name) do
 end
 ```
 
-If you try and run your program again your `greetings.ex` will fail to compile because you're not passing in an argument to the `say_hello/0` function.
+If you try and run your program again your `hello_world.ex` will fail to compile because you're not passing in an argument to the `say_hello/0` function.
 
 It is still important to listen to the compiler in a dynamically typed language like Elixir. While Elixir does not require explicit type declarations, the compiler still performs various checks and optimizations on the code. Listening to it can help catch errors and improve the performance of your code.
 
-Send in "world" to make `greetings.ex` compile.
+Send in "world" to make `hello_world.ex` compile.
 
 ```elixir
 @spec say_hello :: :ok
@@ -190,13 +190,13 @@ Now when you run your tests you should see something like
 
 ```text
   1) test saying hello to people' (GreetingsTest)
-     greetings_test.exs:4
+     hello_world_test.exs:4
      Assertion with == failed
      code:  assert Greetings.hello("Angel") == "Hello, Angel"
      left:  "Hello, world"
      right: "Hello, Angel"
      stacktrace:
-       greetings_test.exs:5: (test)
+       hello_world_test.exs:5: (test)
 ```
 
 The `right:` represent want we are trying to assert, while `left:` represents the actual value returned by the function call.
@@ -343,7 +343,7 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
 
 ```text
   1) test hello/2 say hello in Spanish (GreetingsTest)
-     greetings_test.exs:13
+     hello_world_test.exs:13
      ** (UndefinedFunctionError) function Greetings.hello/2 is undefined or private. Did you mean:
 
            * hello/1
@@ -351,7 +351,7 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
      code: assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Nathan", :spanish)
-       greetings_test.exs:14: (test)
+       hello_world_test.exs:14: (test)
 ```
 
 Fix the test error by adding another string argument to `hello/1`.
@@ -368,11 +368,11 @@ defp name_with_default(""), do: "World"
 defp name_with_default(name), do: name
 ```
 
-When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `greetings.exs`
+When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `hello_world.exs`
 
 ```text
   1) test hello/2 saying hello to people' (GreetingsTest)
-     greetings_test.exs:5
+     hello_world_test.exs:5
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
            * hello/2
@@ -380,20 +380,20 @@ When you try and run the test again it will complain about not passing through e
      code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Angel")
-       greetings_test.exs:6: (test)
+       hello_world_test.exs:6: (test)
 ```
 
 Fix them by passing through empty strings. Now all your tests should pass, apart from our new scenario
 
 ```text
   1) test hello/2 say hello in Spanish (GreetingsTest)
-     greetings_test.exs:13
+     hello_world_test.exs:13
      Assertion with == failed
      code:  assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      left:  "Hello, Nathan"
      right: "Hola, Nathan"
      stacktrace:
-       greetings_test.exs:14: (test)
+       hello_world_test.exs:14: (test)
 ```
 
 We can use pattern matching here to check the language is equal to :spanish and if so change the message
