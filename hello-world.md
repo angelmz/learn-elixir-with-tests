@@ -5,7 +5,7 @@
 It is traditional for your first program in a new language to be [Hello, world](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 
 - Create a folder wherever you like
-- Put a new file in it called `hello_world.ex` and put the following code inside it
+- Put a new file in it called `hello.ex` and put the following code inside it
 
 ```elixir
 defmodule Greetings do
@@ -16,8 +16,7 @@ defmodule Greetings do
 end
 ```
 
-- Run `elixirc` to compile the app, then to run your program in iex type `iex hello_world.ex`.
-- Now type in `Greetings.say_hello()` to be greeted by your program!
+- Type in `iex hello.ex` followed by `Greetings.say_hello()` to be greeted by your program!
 
 ## How it works
 
@@ -37,8 +36,6 @@ end
 - `IO.puts` prints a line to stdout and returns an `:ok` atom when it has finished exectuting successfully.
 
   - Atoms are constants that represent a name or a string. They commonly used as message names in Elixir's process-oriented programming model. The `:ok` atom is a common convention in Elixir to indicate that a function or operation has completed successfully.
-
-- `elixirc` is used to compile Elixir source code files into bytecode that can be run on the Erlang Virtual Machine (VM).
 
 ## How to test
 
@@ -62,7 +59,7 @@ end
 
 We have created a new function again with `def`. This time we've added a type spec of `String.t()` in the definition. This means this function returns a `string`.
 
-Now create a new file called `hello_world_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
+Now create a new file called `hello_test.exs` where we are going to write a test for our `hello/0` function using ExUnit
 
 ```elixir
 ExUnit.start()
@@ -76,9 +73,11 @@ defmodule GreetingsTest do
 end
 ```
 
-Run `elixir test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
+Run `elixirc` to compile the app.
 
-Notice the file extensions `.exs` which `hello_world_test.exs` uses and the `.ex` our `hello_world.ex` file uses. The main difference between .ex and .exs files in Elixir is the way they are compiled and executed. `.ex` files are compiled ahead-of-time (AOT) into bytecode and are intended to be used in production environments, while `.exs` files are interpreted at runtime and are typically used for development, testing, and other tasks that don't require the performance benefits of AOT compilation.
+Then, run `elixir test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
+
+Notice the file extensions `.exs` which `hello_test.exs` uses and the `.ex` our `hello.ex` file uses. The main difference between .ex and .exs files in Elixir is the way they are compiled and executed. `.ex` files are compiled ahead-of-time (AOT) into bytecode and are intended to be used in production environments, while `.exs` files are interpreted at runtime and are typically used for development, testing, and other tasks that don't require the performance benefits of AOT compilation.
 
 ### Writing tests
 
@@ -111,6 +110,10 @@ The `test` macro, which is defined in the ExUnit.Case module, defines a test fun
 
 The assert function is used to make assertions about the expected behavior of your code. When you write a test case, you typically specify the input to your code, the expected output, and any other conditions that should be met. The assert function allows you to check that the actual output of your code matches the expected output and that the other conditions are met.
 
+#### `elixirc`
+
+`elixirc` is used to compile Elixir source code files into bytecode that can be run on the Erlang Virtual Machine (VM). In order to run tests on your Elixir application, you need to compile the code first. Tests are run on the compiled version of the code, which has been transformed into bytecode that can be run on the Erlang Virtual Machine (VM).
+
 ### Hello, YOU
 
 Now that we have a test we can iterate on our software safely.
@@ -137,7 +140,7 @@ Now run `elixir test`, ExUnit's test runner should give you an error
 
 ```text
   1) test saying hello to people' (GreetingsTest)
-     hello_world_test.exs:4
+     hello_test.exs:4
 
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
@@ -146,7 +149,7 @@ Now run `elixir test`, ExUnit's test runner should give you an error
      code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Angel")
-       hello_world_test.exs:5: (test)
+       hello_test.exs:5: (test)
 
 Finished in 0.1 seconds (0.1s on load, 0.00s async, 0.00s sync)
 1 test, 1 failure
@@ -160,11 +163,9 @@ Finished in 0.1 seconds (0.1s on load, 0.00s async, 0.00s sync)
 
 It is important to listen to the ExUnit Test Runner when running into errors because it provides valuable information about what went wrong with the tests and how to fix the issue.
 
-Here, the test runner is telling you to change the function `hello/0` to accept an argument of one.
+Here, the test runner is telling you to change the function `hello/0` to accept an argument of one. Do so now.
 
-Edit the `hello/0` function to accept an argument of one.
-
-Edit the type spec to reflect this. Since we know `name` will be a string, we'll add String.t() to `hello/0`'s argument field and thus make it `hello/1`.
+Then, edit the type spec to reflect this. Since we know `name` will be a string, we'll add String.t() to `hello/0`'s argument field and thus make it `hello/1`.
 
 ```elixir
 @spec hello(String.t()) :: String.t()
@@ -173,11 +174,11 @@ def hello(name) do
 end
 ```
 
-If you try and run your program again your `hello_world.ex` will fail to compile because you're not passing in an argument to the `say_hello/0` function.
+If you try and run your program again with `elixirc`, your `hello.ex` will fail to compile because you're not passing in an argument to the `say_hello/0` function.
 
 It is still important to listen to the compiler in a dynamically typed language like Elixir. While Elixir does not require explicit type declarations, the compiler still performs various checks and optimizations on the code. Listening to it can help catch errors and improve the performance of your code.
 
-Send in "world" to make `hello_world.ex` compile.
+Send in "world" to make `hello.ex` compile.
 
 ```elixir
 @spec say_hello :: :ok
@@ -186,17 +187,19 @@ def say_hello do
 end
 ```
 
+It is important to run `elixirc` after making changes to your code, to recompile you app so that your tests are testing your latest code.
+
 Now when you run your tests you should see something like
 
 ```text
   1) test saying hello to people' (GreetingsTest)
-     hello_world_test.exs:4
+     hello_test.exs:4
      Assertion with == failed
      code:  assert Greetings.hello("Angel") == "Hello, Angel"
      left:  "Hello, world"
      right: "Hello, Angel"
      stacktrace:
-       hello_world_test.exs:5: (test)
+       hello_test.exs:5: (test)
 ```
 
 The `right:` represent want we are trying to assert, while `left:` represents the actual value returned by the function call.
@@ -343,7 +346,7 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
 
 ```text
   1) test hello/2 say hello in Spanish (GreetingsTest)
-     hello_world_test.exs:13
+     hello_test.exs:13
      ** (UndefinedFunctionError) function Greetings.hello/2 is undefined or private. Did you mean:
 
            * hello/1
@@ -351,7 +354,7 @@ Remember not to cheat! _Test first_. When you try and run the test, the test run
      code: assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Nathan", :spanish)
-       hello_world_test.exs:14: (test)
+       hello_test.exs:14: (test)
 ```
 
 Fix the test error by adding another string argument to `hello/1`.
@@ -362,17 +365,13 @@ Fix the test error by adding another string argument to `hello/1`.
 def hello(name, language) do
   @english_hello_prefix <> name_with_default(name)
 end
-
-@spec name_with_default(String.t()) :: String.t()
-defp name_with_default(""), do: "World"
-defp name_with_default(name), do: name
 ```
 
-When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `hello_world.exs`
+When you try and run the test again it will complain about not passing through enough arguments to `hello/2` in your other tests and in `hello.exs`
 
 ```text
   1) test hello/2 saying hello to people' (GreetingsTest)
-     hello_world_test.exs:5
+     hello_test.exs:5
      ** (UndefinedFunctionError) function Greetings.hello/1 is undefined or private. Did you mean:
 
            * hello/2
@@ -380,20 +379,20 @@ When you try and run the test again it will complain about not passing through e
      code: assert Greetings.hello("Angel") == "Hello, Angel"
      stacktrace:
        (greetings 0.1.0) Greetings.hello("Angel")
-       hello_world_test.exs:6: (test)
+       hello_test.exs:6: (test)
 ```
 
 Fix them by passing through empty strings. Now all your tests should pass, apart from our new scenario
 
 ```text
   1) test hello/2 say hello in Spanish (GreetingsTest)
-     hello_world_test.exs:13
+     hello_test.exs:13
      Assertion with == failed
      code:  assert Greetings.hello("Nathan", :spanish) == "Hola, Nathan"
      left:  "Hello, Nathan"
      right: "Hola, Nathan"
      stacktrace:
-       hello_world_test.exs:14: (test)
+       hello_test.exs:14: (test)
 ```
 
 We can use pattern matching here to check the language is equal to :spanish and if so change the message
@@ -406,10 +405,6 @@ We can use pattern matching here to check the language is equal to :spanish and 
 def hello(name, language) do
   language_prefix(language) <> name_with_default(name)
 end
-
-@spec name_with_default(String.t()) :: String.t()
-defp name_with_default(""), do: "World"
-defp name_with_default(name), do: name
 
 @spec language_prefix(String.t()) :: String.t()
 defp language_prefix(:spanish), do: "Hola, "
@@ -429,10 +424,6 @@ Now it is time to _refactor_. You should see some problems in the code, "magic" 
 def hello(name, language) do
   language_prefix(language) <> name_with_default(name)
 end
-
-@spec name_with_default(String.t()) :: String.t()
-defp name_with_default(""), do: "World"
-defp name_with_default(name), do: name
 
 @spec language_prefix(String.t()) :: String.t()
 defp language_prefix(:spanish), do: @spanish_hello_prefix
@@ -457,10 +448,6 @@ You may have written something that looks roughly like this
 def hello(name, language) do
     language_prefix(language) <> name_with_default(name)
 end
-
-@spec name_with_default(String.t()) :: String.t()
-defp name_with_default(""), do: "World"
-defp name_with_default(name), do: name
 
 @spec language_prefix(String.t()) :: String.t()
 defp language_prefix(:spanish), do: @spanish_hello_prefix
@@ -493,10 +480,6 @@ def hello(name, language) do
 
     prefix <> name_with_default(name)
 end
-
-@spec name_with_default(String.t()) :: String.t()
-defp name_with_default(""), do: "World"
-defp name_with_default(name), do: name
 ```
 
 Write a test to now include a greeting in the language of your choice and you should see how simple it is to extend our _amazing_ function.
@@ -514,10 +497,6 @@ You could argue that maybe our function is getting a little big. The simplest re
 def hello(name, language) do
     greeting_prefix(language) <> name_with_default(name)
 end
-
-@spec name_with_default(String.t()) :: String.t()
-defp name_with_default(""), do: "World"
-defp name_with_default(name), do: name
 
 @spec greeting_prefix(String.t()) :: String.t(0)
 defp greeting_prefix(language) do
