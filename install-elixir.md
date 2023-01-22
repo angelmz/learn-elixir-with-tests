@@ -1,4 +1,4 @@
-# Install Elixir and set up it's enviromnet.
+# Install Elixir and set up its enviroment.
 
 The official installation instructions for Elixir are available [here](https://elixir-lang.org/install.html).
 
@@ -22,7 +22,7 @@ Elixir is a dynamically typed language, so all types in Elixir are checked at ru
 
 ElixirLS is a Language Server Protocol (LSP) implementation for Elixir that provides various language features such as code completion, go-to-definition, and linting. Dialyxir is a static code analysis tool for Elixir that can be used to check for issues such as code style violations, potential runtime errors, and other programming issues.
 
-Both ElixirLS and Dialyxir can be used for linting Elixir code, but they operate in different ways. ElixirLS provides real-time linting as you edit your code in an editor, while Dialyxir is a command-line tool that can be run as part of the build process to perform static analysis on the entire codebase.
+Both ElixirLS and Dialyxir are be used for linting Elixir code, but they operate in different ways. ElixirLS provides real-time linting as you edit your code in an editor, while Dialyxir is a command-line tool that can be run as part of the build process to perform static analysis on the entire codebase.
 
 ElixirLS is typically used to provide linting and other language features in an editor, while Dialyxir is more geared towards checking the overall quality and consistency of the codebase. You can use both tools together, or choose one depending on your specific needs and workflow.
 
@@ -33,7 +33,7 @@ ElixirLS is typically used to provide linting and other language features in an 
 
 A big emphasis of this book is the importance of refactoring.
 
-Your tools can help you do bigger refactoring with confidence.
+Your tools can help you do larger refactors with confidence.
 
 You should be familiar enough with your editor to perform the following with a simple key combination:
 
