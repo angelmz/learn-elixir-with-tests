@@ -75,7 +75,7 @@ end
 
 1. Run `elixirc hello.ex` to first compile the app.
 
-2. Then, run `elixir hello.exs` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
+2. Then, run `elixir hello_test.exs` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `"Hello, world"` string.
 
 Notice the file extensions `.exs` which `hello_test.exs` uses and the `.ex` our `hello.ex` file uses. The main difference between .ex and .exs files in Elixir is the way they are compiled and executed. `.ex` files are compiled ahead-of-time (AOT) into bytecode and are intended to be used in production environments, while `.exs` files are interpreted at runtime and are typically used for development, testing, and other tasks that don't require the performance benefits of AOT compilation.
 
