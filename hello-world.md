@@ -136,7 +136,7 @@ defmodule GreetingsTest do
 end
 ```
 
-Now run `elixir test`, ExUnit's test runner should give you an error
+Now run `elixir hello_test.exs`, ExUnit's test runner should give you an error
 
 ```text
   1) test saying hello to people' (GreetingsTest)
